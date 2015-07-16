@@ -232,17 +232,21 @@ Will produce `[Popo popO]`. To escape `@` itself use `@@`. It's also used to bre
 
 ## Text
 
-The text object has a few variables that can be specified on its configuration table that might be useful:
+The text object has a few variables that can be specified on its configuration table:
 
-`font:` sets the font to be used
+`font:` sets the font to be used by default. You can also set other types of fonts directly (bold, bold_italic, italic, light, etc) and they will work like a function inside a tag:
 
-`line_height:` the actual line height drawn in pixels is the multiplication of this number by the font height 
+```
+text = Text(10, 10, '[Light text](light) [bold + italic text](bold_italic) normal text', {
+  font = love.graphics.setFont('DJB Almost Perfect.ttf', 72),
+  light = love.graphics.setFont('DJB Almost Perfect Light.ttf', 72),
+  bold_italic = love.graphics.setFont('DJB Almost Perfect Bold Italic.ttf', 72),
+})
+```
+
+`line_height:` the actual line height drawn in pixels is the multiplication of this number by the font height, so, for instance, if your font is of size 20 and you want the line height to be a bit bigger than that, like, let's say 28, you want to set `line_height` to `20*x = 28 -> x = 28/20 = 1.4`
 
 `wrap_width:` maximum width in pixels that this text can go, after that it will wrap to the next line
-
-`config:` reference to the configuration table passed on this text object's creation
-
-`str_text:` the text string as it will be printed on the screen
 
 `align_right:` if `wrap_width` is set, will align text to the right if set to `true`
 
@@ -250,13 +254,30 @@ The text object has a few variables that can be specified on its configuration t
 
 `justify:` if `wrap_width` is set, will align text to be perfectly aligned to both left and right if set to `true`
 
+Here's an example of some of those settings being used:
+
+```
+text = Text(10, 10, 'Popo popO', {
+  font = love.graphics.setFont('DJB Almost Perfect.ttf', 72),
+  wrap_width = 250,
+  justify = true,
+  line_height = 2,
+})
+```
+
+The text object also has a few read-only variables:
+
+`config:` reference to the configuration table passed on this text object's creation
+
+`str_text:` the text string as it will be printed on the screen
+
 `n_lines:` the number of lines this text has
 
 `new_line_positions:` an array containing all new line positions in the text string, so, for instance, if on the first line of this text the character `24` breaks into a new line because `wrap_width` is set, then the number `24` will be the first value in this array
 
 ## Character
 
-Similarly, the character table has a few variables that might be useful:
+The character table has a few variables that might be useful:
 
 `x, y:` the x, y position of the character
 
