@@ -198,7 +198,7 @@ Currently values that can be passed are `numbers`, `strings` and `booleans`. I h
 
 In case you want to have even more control over how each character is drawn you can also specify a custom draw function:
 
-```
+```lua
 text = Text(10, 10, 'Popo popO', {
   customDraw = function(x, y, c)
     love.graphics.print(c.character, (x or c.text.x) + c.x, (y or c.text.y) + c.y, c.r or 0, c.sx or 1, c.sy or 1, 0, 0)
@@ -236,7 +236,7 @@ The text object has a few variables that can be specified on its configuration t
 
 `font:` sets the font to be used by default. You can also set other types of fonts directly (bold, bold_italic, italic, light, etc) and they will work like a function inside a tag:
 
-```
+```lua
 text = Text(10, 10, '[Light text](light) [bold + italic text](bold_italic) normal text', {
   font = love.graphics.setFont('DJB Almost Perfect.ttf', 72),
   light = love.graphics.setFont('DJB Almost Perfect Light.ttf', 72),
@@ -256,7 +256,7 @@ text = Text(10, 10, '[Light text](light) [bold + italic text](bold_italic) norma
 
 Here's an example of some of those settings being used:
 
-```
+```lua
 text = Text(10, 10, 'Popo popO', {
   font = love.graphics.setFont('DJB Almost Perfect.ttf', 72),
   wrap_width = 250,
