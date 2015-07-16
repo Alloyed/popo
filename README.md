@@ -250,6 +250,8 @@ The text object has a few variables that can be specified on its configuration t
 
 `justify:` if `wrap_width` is set, will align text to be perfectly aligned to both left and right if set to `true`
 
+`n_lines:` the number of lines this text has
+
 `new_line_positions:` an array containing all new line positions in the text string, so, for instance, if on the first line of this text the character `24` breaks into a new line because `wrap_width` is set, then the number `24` will be the first value in this array
 
 ## Character
