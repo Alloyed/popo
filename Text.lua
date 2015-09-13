@@ -4,7 +4,7 @@ Text.__index = Text
 require(text_path .. 'utf8-l')
 
 local tableContains = function(t, value) for k, v in pairs(t) do if v == value then return true end end end
-local stringToAny = function(str) return loadstring("return " .. str)() end
+local stringToAny = function(str) return ((loadstring("return " .. str) or function() end)() or str)  end
 
 function Text.new(x, y, text, settings)
     local self = {}
