@@ -486,9 +486,28 @@ function Text.new(x, y, text, settings)
     self.n_lines = #new_line_positions + 1
     self.dt = 0
     self.custom_draw = false
+    self.custom_draw_image = false
     for k, v in pairs(self) do
         if type(v) == 'function' and k == 'customDraw' then
             self.custom_draw = v
+        end
+        if type(v) == 'function' and k == 'customDrawImage' then
+            self.custom_draw_image = v
+        end
+    end
+    
+    -- Set images on the character table now, so that they may be used in Init functions.
+    for k, v in pairs(self) do
+        if type(v) == 'userdata' then
+            if v:type() == 'Image' then
+                for _, c in ipairs(self.characters) do
+                    for _, modifier in ipairs(c.modifiers) do
+                        if modifier == k then
+                            c.image = v
+                        end
+                    end
+                end
+            end
         end
     end
 
@@ -555,16 +574,28 @@ function Text:draw(x, y)
                     if type(modifier) == 'function' or type(self[modifier]) == 'function' then
                         self[modifier](self.dt, c) 
                         table.insert(called_functions, modifier)
-                    else
+                    elseif self[modifier]:type() == 'Font' then
                         love.graphics.setFont(self[modifier])
                         regular_font = false
+                    elseif self[modifier]:type() == 'Image' then
+                        -- Do nothing. We don't want to error.
+                        -- The image was set on the character table earlier.
+                    else
+                        error("unsupported modifier type: " .. self[modifier]:type() )
                     end
                 end
             end
         end
         if regular_font then love.graphics.setFont(self.font) end
-        if self.custom_draw then self.custom_draw(x or self.x, y or self.y, c)
-        else love.graphics.print(c.character, (x or self.x) + c.x, (y or self.y) + c.y, c.r or 0, c.sx or 1, c.sy or 1, 0, 0) end
+        if not c.image then
+            if self.custom_draw then self.custom_draw(x or self.x, y or self.y, c)
+            else love.graphics.print(c.character, (x or self.x) + c.x, (y or self.y) + c.y, c.r or 0, c.sx or 1, c.sy or 1, 0, 0) end
+            drew_image_previously = false
+        elseif drew_image_previously ~= true then
+            if self.custom_draw_image then self.custom_draw_image(c.image, x or self.x, y or self.y, c)
+            else love.graphics.draw(c.image, (x or self.x) + c.x, (y or self.y) + c.y, c.r or 0, c.sx or 1, c.sy or 1, 0, 0) end
+            drew_image_previously = true
+        end
     end
     love.graphics.setFont(font)
 end
