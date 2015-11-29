@@ -551,6 +551,7 @@ function Text:draw(x, y)
     love.graphics.setFont(self.font or font)
 
     local regular_font = true
+    local drew_image_previously = false
     for _, c in ipairs(self.characters) do
         -- Call each modifier function
         regular_font = true
@@ -600,4 +601,4 @@ function Text:draw(x, y)
     love.graphics.setFont(font)
 end
 
-return setmetatable({new = new}, {__call = function(_, ...) return Text.new(...) end})
+return setmetatable({new = Text.new}, {__call = function(_, ...) return Text.new(...) end})
